@@ -10,6 +10,7 @@ def selection_sort(A) :
             
         x[largest],x[last] = x[last],x[largest]
 
+####################################################
 def bubble_sort(A):
     for last in range(len(A)-1,0,-1):
         sorted = True #finish
@@ -20,6 +21,7 @@ def bubble_sort(A):
             if sorted: #finish
                 break
 
+####################################################
 def insertion_sort(A):
     for i in range(1,len(A)):
         loc=i-1
@@ -29,7 +31,7 @@ def insertion_sort(A):
             loc-=1
         A[loc+1]=new_item
 
-
+####################################################
 def merge_sort(A,p,r):
     if p<r:
         q = (p+r)//2
@@ -65,25 +67,27 @@ def merge_sort(A,p,r):
             i+=1
             t+=1
 
-    def merge_sort_simple(A):
-        if len(A)>1:
-            mid = len(A)//2
-            la,ra=A[:mid],A[mid:]
-            merge_sort_simple(la)
-            merge_sort_simple(ra)
-            li,ri,i=0,0,0
-            while li < len(la) and ri < len(ra):
-                if la[li] < ra[ri]:
-                    A[i]=la[li]
-                    li+=1
+####################################################
+def merge_sort_simple(A):
+    if len(A)>1:
+        mid = len(A)//2
+        la,ra=A[:mid],A[mid:]
+        merge_sort_simple(la)
+        merge_sort_simple(ra)
+        li,ri,i=0,0,0
+        while li < len(la) and ri < len(ra):
+            if la[li] < ra[ri]:
+                A[i]=la[li]
+                li+=1
 
-                else:
-                    A[i] = ra[ri]
-                    ri +=1
+            else:
+                A[i] = ra[ri]
+                ri +=1
 
-                i+=1
-            A[i:]=la[li:] if li !=len(la) else ra[ri:]
+            i+=1
+        A[i:]=la[li:] if li !=len(la) else ra[ri:]
 
+####################################################
 def quick_sort(A):
     if len(A) <= 1:
         return A
@@ -105,7 +109,8 @@ def quick_sort(A):
 
     return quick_sort(less) + equal + quick_sort(more)
 
-def partition(A,p,r):
+####################################################
+def partition_1(A,p,r):
     x = A[p]
     left = p+1
     right = r
@@ -123,14 +128,38 @@ def partition(A,p,r):
     A[p],A[right] = A[right],A[p]
     return right
 
-def qsort(A,p,r):
+def qsort_1(A,p,r):
     if p<r:
-        q = partition(A,p,r)
-        qsort(A,p,q-1)
-        qsort(A,q+1,r)
+        q = partition_1(A,p,r)
+        qsort_1(A,p,q-1)
+        qsort_1(A,q+1,r)
 
-def quick_sort_another(A):
-    qsort(A,0,len(A)-1)
+def quick_sort_1(A):
+    qsort_1(A,0,len(A)-1)
+
+####################################################
+def partition_2(A,p,r):
+    x = A[r]
+    i=p
+    
+    for j in range(p,r):
+        if A[j] <= x:
+            A[i],A[j] = A[j],A[i]
+            i+=1
+
+    A[i],A[r] = A[r],A[i]
+    return i
+
+def qsort_2(A,p,r):
+    if p<r:
+        q = partition_2(A,p,r)
+        qsort_2(A,p,q-1)
+        qsort_2(A,q+1,r)
+
+def quick_sort_2(A):
+    qsort_2(A,0,len(A)-1)
+
+####################################################
 
 def test(A):
     for i in range(1,len(A)):
@@ -149,7 +178,8 @@ if __name__ == "__main__":
     #merge_sort(x,0,len(x)-1)
     #merge_sort_simple(x)
     #quick_sort(x)
-    quick_sort_another(x)
+    #quick_sort_1(x)
+    #quick_sort_2(x)
     
     print(timer()-start)
     print(x)
