@@ -160,6 +160,45 @@ def quick_sort_2(A):
     qsort_2(A,0,len(A)-1)
 
 ####################################################
+def heapify(A,k,n):
+    largest = k
+    left = 2*k+1
+    right = 2*k+2
+    if left < n and A[left] > A[largest]:
+        largest = left
+    if right < n and A[right] > A[largest]:
+        largest = right
+    if largest != k :
+        A[k], A[largest] = A[largest], A[k]
+        heapify(A,largest,n)
+
+def heap_sort(A):
+    n = len(A)
+    for i in range(n//2 - 1,-1,-1):
+        heapify(A,i,n)
+    for i in range(n-1,0,-1):
+        A[0],A[i]=A[i],A[0]
+        heapify(A,0,i)
+
+####################################################
+def rsort(A,m):
+    buckets = [ [] for _ in range(10)]
+    for v in A:
+        index = v//(10**m)
+        index %= 10
+        buckets[index].append(v)
+    
+    res = []
+    for bucket in buckets:
+        res.extend(bucket)
+    
+    return res
+
+def radix_sort(A,k):
+    for i in range(0,k):
+        A = rsort(A,i)
+
+    return A
 
 def test(A):
     for i in range(1,len(A)):
@@ -167,6 +206,20 @@ def test(A):
             return False
         return True
        
+####################################################
+def counting_sort(A,k):
+    B = [0]*len(A)
+    C = [0]*(k+1)
+    for v in A:
+        C[v] +=1
+    for i in range(1,k+1):
+        C[i] += C[i-1]
+    for i in range(len(A)-1,-1,-1):
+        v=A[i]
+        B[C[v]-1] = v
+        C[v] -=1
+    
+    return B
 
 if __name__ == "__main__":
     x = random.sample(range(10000),100)
@@ -180,7 +233,9 @@ if __name__ == "__main__":
     #quick_sort(x)
     #quick_sort_1(x)
     #quick_sort_2(x)
-    
+    #heap_sort(x)
+    #x = radix_sort(x,4)
+    x = counting_sort(x,9999)
     print(timer()-start)
     print(x)
     print(test(x))
